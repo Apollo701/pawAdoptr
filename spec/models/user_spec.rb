@@ -24,6 +24,13 @@ describe User, type: :model do
     expect(dup_user).to be_invalid
   end
 
+  it "is saving emails as lowercase" do
+    mixed_case = "ExAmPlE@ExAmPlE.CoM"
+    @user.email = mixed_case
+    @user.save
+    expect(@user.reload.email).to eq(mixed_case.downcase)
+  end
+
   describe "with different emails" do
     before :each do
       @valid_emails = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
