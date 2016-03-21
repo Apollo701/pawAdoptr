@@ -1,28 +1,25 @@
 require 'rails_helper'
 
 describe User, type: :model do
-
-  it "is valid with valid email" do
-    user = User.new(email: "example@example.com")
-
-    expect(user).to be_valid
+  before :each do
+    @user = User.new(email: "example@example.com", password: "foobar", password_confirmation: "foobar")
   end
 
-  it "is invalid if emails is blank" do
-    user = User.new(email: "   ")
+  it "is invalid if email is blank" do
+    @user.email = "     "
 
-    expect(user).to be_invalid
+    expect(@user).to be_invalid
   end
 
   it "is invalid if email is > 255 characters" do
-    user = User.new(email: "a" * 256)
+    @user.email = "a" * 256
 
-    expect(user).to be_invalid
+    expect(@user).to be_invalid
   end
 
   it "is invalid if email already exists" do
-    user = User.create(email: "example@example.com")
-    dup_user = user.dup
+    @user.save
+    dup_user = @user.dup
     dup_user.email = dup_user.email.upcase
     expect(dup_user).to be_invalid
   end
@@ -38,15 +35,31 @@ describe User, type: :model do
 
     context "with valid emails" do
       it "is a valid user" do
-        @valid_emails.each { |valid_email| expect(User.new(email: valid_email)).to be_valid }
+        @valid_emails.each do |valid_email|
+          @user.email = valid_email
+          expect(@user).to be_valid
+        end
       end
     end
 
     context "with invalid emails" do
       it "is not a valid user" do
-        @invalid_emails.each { |invalid_email| expect(User.new(email: invalid_email)).to be_invalid }
+        @invalid_emails.each do |invalid_email|
+          @user.email = invalid_email
+          expect(@user).to be_invalid
+        end
       end
     end
+  end
+
+  it "is invalid with no password" do
+    @user.password = @user.password_confirmation = " " * 6
+    expect(@user).to be_invalid
+  end
+
+  it "is invalid with 5 character password" do
+    @user.password = @user.password_confirmation = "a" * 5
+    expect(@user).to be_invalid
   end
 
 end
