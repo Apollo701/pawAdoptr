@@ -3,5 +3,5 @@ class Pet < ActiveRecord::Base
   enum animal: [:dog, :cat]
   validates :name, presence: true, format: { with: VALID_NAME_REGEX }
   validates :animal, inclusion: { in: animals.keys }
-  validates :bio, presence: true, length: { minimum: 155 }
+  validates :bio, presence: true, length: { minimum: 150 }
 end
