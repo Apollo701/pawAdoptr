@@ -15,7 +15,7 @@ describe Pet, type: :model do
     end
 
     it "is invalid with name and no animal type" do
-      pet = Pet.new(name: "Mike")
+      pet = Pet.new(name: "John")
 
       expect(pet).to be_invalid
     end
@@ -28,7 +28,7 @@ describe Pet, type: :model do
   end
 
   it "is valid with valid name and animal type" do
-    pet = Pet.new(animal: :cat, name: "Mike")
+    pet = Pet.new(animal: :cat, name: "John doe")
 
     expect(pet).to be_valid
   end
@@ -40,12 +40,16 @@ describe Pet, type: :model do
   end
 
   it "is invalid with symbols in name" do
-    pet = Pet.new(animal: :dog, name: "Mike$mith")
+    pet = Pet.new(animal: :dog, name: "John Do$")
 
     expect(pet).to be_invalid
   end
 
-  it "has a bio"
+  it "is invalid with no bio" do
+    pet = Pet.new(bio: "")
+
+    expect(pet.bio).not_to be_empty
+  end
   it "has a breed"
   it "is male or female"
   it "has a valid age"
