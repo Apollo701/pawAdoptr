@@ -30,13 +30,13 @@ describe Pet, type: :model do
     it "is valid as a cat" do
       @pet.animal = :cat
 
-      expect(@pet).to be_valid
+      expect(@pet).to_not be_invalid
     end
 
     it "is valid as a dog" do
       @pet.animal = :dog
 
-      expect(@pet).to be_valid
+      expect(@pet).to_not be_invalid
     end
 
     it "is invalid with no animal type" do
@@ -67,13 +67,13 @@ describe Pet, type: :model do
   it "is valid with a hyphen in the name" do
     @pet.name = "gluteus-maximus"
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "is valid with a space and period in name" do
     @pet.name = "dr. Evil"
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "is invalid with no bio" do
@@ -86,73 +86,73 @@ describe Pet, type: :model do
     @pet.bio = "Lorem ipsum dolor sit amet, consectetur 
                    adipiscing elit. Sed scelerisque arcu quis fermentum 
                    tristique. Sed rutrum turpis eget varius volutpat.".squish
-    expect(@pet).to be_invalid                   
+    expect(@pet).to_not be_valid                   
   end
 
   it "is invalid with bio > 1000 characters" do
     @pet.bio = "a" * 1001
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid with no breed" do
     @pet.breed = nil
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid if the breed has symbols" do
     @pet.breed = "$%@Corgi"
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid if it has no sex" do
     @pet.sex = nil
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is valid if it is a male" do
     @pet.sex = :male
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "is valid if it is a female" do
     @pet.sex = :female
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "is invalid with an char age" do
     @pet.age = "a"
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is valid with age > 0 and age < 30" do
     @pet.age = 15
 
-    expect(@pet).to be_valid 
+    expect(@pet).to_not be_invalid 
   end
 
   it "is invalid with age 0" do
     @pet.age = 0
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid with age of 30" do
     @pet.age = 30
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid without a size" do
     @pet.size = nil
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is a small pet" do
@@ -176,19 +176,19 @@ describe Pet, type: :model do
   it "is valid with a small size" do
     @pet.size = :small
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "is valid with a medium size" do
     @pet.size = :medium
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "is valid with a large size" do
     @pet.size = :large
 
-    expect(@pet).to be_valid
+    expect(@pet).to_not be_invalid
   end
 
   it "has valid weight"
