@@ -7,7 +7,11 @@ describe Pet, type: :model do
                    bio: "Lorem ipsum dolor sit amet, consectetur 
                    adipiscing elit. Sed scelerisque arcu quis fermentum 
                    tristique. Sed rutrum turpis eget varius volutpat. 
-                   Nullam".squish)
+                   Nullam".squish,
+                   breed: "Corgi",
+                   sex: "male",
+                   age: 10,
+                   size: :small)
   end
 
   describe "is a specific type of animal" do
@@ -17,47 +21,65 @@ describe Pet, type: :model do
       expect(@pet.animal).to eq("dog")
     end
 
-    it "is valid as a cat" do
+    it "is a cat" do
       @pet.animal = :cat
 
       expect(@pet.animal).to eq("cat")
     end
 
+    it "is valid as a cat" do
+      @pet.animal = :cat
+
+      expect(@pet).to be_valid
+    end
+
+    it "is valid as a dog" do
+      @pet.animal = :dog
+
+      expect(@pet).to be_valid
+    end
+
     it "is invalid with no animal type" do
       @pet.animal = nil
 
-      expect(@pet).to be_invalid
+      expect(@pet).to_not be_valid
     end
   end
 
   it "is invalid with no name" do
     @pet.name = " " * 6
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid with numerical name" do
     @pet.name = 1245
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid with symbols in name" do
-    @pet.name = "John$"
+    @pet.name = "j@hn"
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
-  it "is invalid with a space in the name" do
-    @pet.name = "John Doe"
+  it "is valid with a hyphen in the name" do
+    @pet.name = "gluteus-maximus"
 
-    expect(@pet).to be_invalid
+    expect(@pet).to be_valid
+  end
+
+  it "is valid with a space and period in name" do
+    @pet.name = "dr. Evil"
+
+    expect(@pet).to be_valid
   end
 
   it "is invalid with no bio" do
     @pet.bio = ""
 
-    expect(@pet).to be_invalid
+    expect(@pet).to_not be_valid
   end
 
   it "is invalid with bio < 150 characters" do
@@ -67,10 +89,108 @@ describe Pet, type: :model do
     expect(@pet).to be_invalid                   
   end
 
-  it "has a breed"
-  it "is male or female"
-  it "has a valid age"
-  it "is small, medium, or large"
+  it "is invalid with bio > 1000 characters" do
+    @pet.bio = "a" * 1001
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is invalid with no breed" do
+    @pet.breed = nil
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is invalid if the breed has symbols" do
+    @pet.breed = "$%@Corgi"
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is invalid if it has no sex" do
+    @pet.sex = nil
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is valid if it is a male" do
+    @pet.sex = :male
+
+    expect(@pet).to be_valid
+  end
+
+  it "is valid if it is a female" do
+    @pet.sex = :female
+
+    expect(@pet).to be_valid
+  end
+
+  it "is invalid with an char age" do
+    @pet.age = "a"
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is valid with age > 0 and age < 30" do
+    @pet.age = 15
+
+    expect(@pet).to be_valid 
+  end
+
+  it "is invalid with age 0" do
+    @pet.age = 0
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is invalid with age of 30" do
+    @pet.age = 30
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is invalid without a size" do
+    @pet.size = nil
+
+    expect(@pet).to be_invalid
+  end
+
+  it "is a small pet" do
+    @pet.size = :small
+
+    expect(@pet.size).to eq("small")
+  end
+
+  it "is a medium pet" do
+    @pet.size = :medium
+
+    expect(@pet.size).to eq("medium")
+  end
+
+  it "is a large pet" do
+    @pet.size = :large
+
+    expect(@pet.size).to eq("large")
+  end
+
+  it "is valid with a small size" do
+    @pet.size = :small
+
+    expect(@pet).to be_valid
+  end
+
+  it "is valid with a medium size" do
+    @pet.size = :medium
+
+    expect(@pet).to be_valid
+  end
+
+  it "is valid with a large size" do
+    @pet.size = :large
+
+    expect(@pet).to be_valid
+  end
+
   it "has valid weight"
   it "is neutered or spayed"
 end
