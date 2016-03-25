@@ -1,196 +1,156 @@
 require 'rails_helper'
 
-describe Pet, type: :model do
-  before :each do
-    @pet = Pet.new(animal: :dog,
+describe Pet do
+
+  context "initial tests validating attributes" do
+    it { should respond_to :species }
+    it { should respond_to :sex }
+    it { should respond_to :size }
+    it { should respond_to :breed }
+    it { should respond_to :name }
+    it { should respond_to :bio }
+    it { should respond_to :age }
+    it { should respond_to :weight }
+    it { should respond_to :fixed }
+  end
+
+  describe "testing attributes of pets" do
+  before do
+    @pet = Pet.new(species: :dog,
                    name: "John",
                    bio: "Lorem ipsum dolor sit amet, consectetur 
                    adipiscing elit. Sed scelerisque arcu quis fermentum 
                    tristique. Sed rutrum turpis eget varius volutpat. 
                    Nullam".squish,
                    breed: "Corgi",
-                   sex: "male",
+                   sex: :male,
                    age: 10,
-                   size: :small)
+                   size: :small,
+                   weight: 22,
+                   fixed: :neutered)
   end
 
-  describe "is a specific type of animal" do
-    it "is valid as a dog" do
-      @pet.animal = :dog
+  subject { @pet } 
 
-      expect(@pet.animal).to eq("dog")
-    end
-
-    it "is a cat" do
-      @pet.animal = :cat
-
-      expect(@pet.animal).to eq("cat")
-    end
-
-    it "is valid as a cat" do
-      @pet.animal = :cat
-
-      expect(@pet).to_not be_invalid
-    end
-
-    it "is valid as a dog" do
-      @pet.animal = :dog
-
-      expect(@pet).to_not be_invalid
-    end
-
-    it "is invalid with no animal type" do
-      @pet.animal = nil
-
-      expect(@pet).to_not be_valid
-    end
+  it "belongs to an invalid species" do
+    expect{ @pet.species = :lizard }.to raise_error(ArgumentError)
   end
 
-  it "is invalid with no name" do
-    @pet.name = " " * 6
-
-    expect(@pet).to_not be_valid
+  context "has nil species" do
+    before { @pet.species = nil }
+    it { should_not be_valid }
   end
 
-  it "is invalid with numerical name" do
-    @pet.name = 1245
+  context "has no species" do
+    before { @pet.species = "" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is invalid with symbols in name" do
-    @pet.name = "j@hn"
+  context "has no name" do
+    before { @pet.name = "" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is valid with a hyphen in the name" do
-    @pet.name = "gluteus-maximus"
+  context "has nil name" do
+    before { @pet.species = nil }
 
-    expect(@pet).to_not be_invalid
+    it { should_not be_valid }
   end
 
-  it "is valid with a space and period in name" do
-    @pet.name = "dr. Evil"
+  context "has numerical name" do
+    before { @pet.name = 12345 }
 
-    expect(@pet).to_not be_invalid
+    it { should_not be_valid }
   end
 
-  it "is invalid with no bio" do
-    @pet.bio = ""
+  context "has symbols name" do
+    before { @pet.name = "$&^" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is invalid with bio < 150 characters" do
-    @pet.bio = "Lorem ipsum dolor sit amet, consectetur 
-                   adipiscing elit. Sed scelerisque arcu quis fermentum 
-                   tristique. Sed rutrum turpis eget varius volutpat.".squish
-    expect(@pet).to_not be_valid                   
+  context "has no sex" do
+    before { @pet.sex = "" }
+
+    it { should_not be_valid }
   end
 
-  it "is invalid with bio > 1000 characters" do
-    @pet.bio = "a" * 1001
+  context "has nil sex" do
+    before { @pet.sex = nil }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is invalid with no breed" do
-    @pet.breed = nil
-
-    expect(@pet).to_not be_valid
+  it "has invalid sex" do
+    expect { @pet.sex = :giraffe }.to raise_error(ArgumentError)
   end
 
-  it "is invalid if the breed has symbols" do
-    @pet.breed = "$%@Corgi"
+  context "has no size" do
+    before { @pet.size = "" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is invalid if it has no sex" do
-    @pet.sex = nil
+  context "has nil size" do
+    before { @pet.size = nil }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is valid if it is a male" do
-    @pet.sex = :male
-
-    expect(@pet).to_not be_invalid
+  it "has invalid size" do
+    expect { @pet.size = :extraLarge }.to raise_error(ArgumentError)
   end
 
-  it "is valid if it is a female" do
-    @pet.sex = :female
+  context "has no breed" do
+    before { @pet.breed = "" }
 
-    expect(@pet).to_not be_invalid
+    it { should_not be_valid }
   end
 
-  it "is invalid with an char age" do
-    @pet.age = "a"
+  context "has nil breed" do
+    before { @pet.breed = "" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is valid with age > 0 and age < 30" do
-    @pet.age = 15
+  context "has numerical breed" do
+    before { @pet.breed = 12345 }
 
-    expect(@pet).to_not be_invalid 
+    it { should_not be_valid }
   end
 
-  it "is invalid with age 0" do
-    @pet.age = 0
+  context "has symbols breed" do
+    before { @pet.breed = "&^%" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is invalid with age of 30" do
-    @pet.age = 30
+  context "has no bio" do
+    before { @pet.bio = "" }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is invalid without a size" do
-    @pet.size = nil
+  context "has nil bio" do
+    before { @pet.bio = nil }
 
-    expect(@pet).to_not be_valid
+    it { should_not be_valid }
   end
 
-  it "is a small pet" do
-    @pet.size = :small
+  context "has bio < 150 characters" do
+    before { @pet.bio = "a" * 149 }
 
-    expect(@pet.size).to eq("small")
+    it { should_not be_valid }
   end
 
-  it "is a medium pet" do
-    @pet.size = :medium
+  context "has bio > 500 characters" do
+    before { @pet.bio = "a" * 501 }
 
-    expect(@pet.size).to eq("medium")
+    it { should_not be_valid }
   end
-
-  it "is a large pet" do
-    @pet.size = :large
-
-    expect(@pet.size).to eq("large")
-  end
-
-  it "is valid with a small size" do
-    @pet.size = :small
-
-    expect(@pet).to_not be_invalid
-  end
-
-  it "is valid with a medium size" do
-    @pet.size = :medium
-
-    expect(@pet).to_not be_invalid
-  end
-
-  it "is valid with a large size" do
-    @pet.size = :large
-
-    expect(@pet).to_not be_invalid
-  end
-
-  it "has valid weight"
+  
   it "is neutered or spayed"
+end
 end
