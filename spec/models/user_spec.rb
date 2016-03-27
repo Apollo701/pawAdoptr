@@ -5,29 +5,37 @@ describe User, type: :model do
     @user = User.new(email: "example@example.com", password: "foobar", password_confirmation: "foobar")
   end
 
-  it "is invalid if email is blank" do
-    @user.email = "     "
+  subject { @user }
 
-    expect(@user).to be_invalid
+  context "is invalid if email is blank" do
+    before { @user.email = " " }
+
+    it { should_not be_valid }
   end
 
-  it "is invalid if email is > 255 characters" do
-    @user.email = "a" * 256
+  context "is invalid if email is > 255 characters" do
+    before { @user.email = "a" * 256 }
 
-    expect(@user).to be_invalid
+    it { should_not be_valid }
   end
 
-  it "is invalid if email already exists" do
-    @user.save
-    dup_user = @user.dup
-    dup_user.email = dup_user.email.upcase
-    expect(dup_user).to be_invalid
+  context "is invalid if email already exists" do
+    before do
+      dup_user = @user.dup
+      dup_user.email = dup_user.email.upcase
+      dup_user.save
+    end
+    
+    it { should_not be_valid }
   end
 
   it "is saving emails as lowercase" do
-    mixed_case = "ExAmPlE@ExAmPlE.CoM"
-    @user.email = mixed_case
-    @user.save
+    before do
+      mixed_case = "ExAmPlE@ExAmPlE.CoM"
+      @user.email = mixed_case
+      @user.save 
+    end
+    
     expect(@user.reload.email).to eq(mixed_case.downcase)
   end
 
