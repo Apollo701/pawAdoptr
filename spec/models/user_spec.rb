@@ -1,80 +1,70 @@
 require 'rails_helper'
 
-describe User, type: :model do
-  before :each do
-    @user = User.new(email: "example@example.com", password: "foobar", password_confirmation: "foobar")
-  end
+describe User do
+  describe "models/user.rb" do
+    let(:user) { FactoryGirl.build :user }
 
-  subject { @user }
+    it { should respond_to :email }
+    it { should respond_to :password }
+    it { should respond_to :password_confirmation }
+    it { should respond_to :password_digest }
 
-  context "is invalid if email is blank" do
-    before { @user.email = " " }
+    context "basic checks" do
+      it "has an email" do
+        expect(user.email).to eq("test@example.com")
+      end
 
-    it { should_not be_valid }
-  end
+      it "has a password & password password confirmation" do
+        expect(user.password).to eq("foobar")
+        expect(user.password_confirmation).to eq("foobar")
+      end
 
-  context "is invalid if email is > 255 characters" do
-    before { @user.email = "a" * 256 }
+      it "can authenticate" do
+        expect(!!user.authenticate('foobar')).to be true
+      end
 
-    it { should_not be_valid }
-  end
+      it "saves emails as lowercase" do
+        mixed_case_email = "ExAmPlE@ExAmPlE.CoM"
+        user.email = mixed_case_email
+        user.save
+        expect(user.reload.email).to eq(mixed_case_email.downcase)
+      end
 
-  context "is invalid if email already exists" do
-    before do
-      dup_user = @user.dup
-      dup_user.email = dup_user.email.upcase
-      dup_user.save
-    end
-    
-    it { should_not be_valid }
-  end
+      describe "duplicate user" do
+        before do
+          dup_user = user.dup
+          dup_user.email = dup_user.email.upcase
+          dup_user.save
+        end
 
-  it "is saving emails as lowercase" do
-    before do
-      mixed_case = "ExAmPlE@ExAmPlE.CoM"
-      @user.email = mixed_case
-      @user.save 
-    end
-    
-    expect(@user.reload.email).to eq(mixed_case.downcase)
-  end
+        it "is invalid if email already exists" do
+          expect(user).to be_invalid
+        end
+      end
 
-  describe "with different emails" do
-    before :each do
-      @valid_emails = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
-                         first.last@foo.jp alice+bob@baz.cn]
+      describe "valid and invalid emails" do
+        before :each do
+        @valid_emails = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
+                           first.last@foo.jp alice+bob@baz.cn]
 
-      @invalid_emails = %w[user@example,com user_at_foo.org user.name@example.
-                           foo@bar_baz.com foo@bar+baz.com]
-    end
+        @invalid_emails = %w[user@example,com user_at_foo.org user.name@example.
+                             foo@bar_baz.com foo@bar+baz.com]
+        end
 
-    context "with valid emails" do
-      it "is a valid user" do
-        @valid_emails.each do |valid_email|
-          @user.email = valid_email
-          expect(@user).to be_valid
+        it "is has valid emails" do
+          @valid_emails.each do |valid_email|
+            user.email = valid_email
+            expect(user).to be_valid
+          end
+        end
+
+        it "is not a valid user" do
+          @invalid_emails.each do |invalid_email|
+            user.email = invalid_email
+            expect(user).to be_invalid
+          end
         end
       end
     end
-
-    context "with invalid emails" do
-      it "is not a valid user" do
-        @invalid_emails.each do |invalid_email|
-          @user.email = invalid_email
-          expect(@user).to be_invalid
-        end
-      end
-    end
   end
-
-  it "is invalid with no password" do
-    @user.password = @user.password_confirmation = " " * 6
-    expect(@user).to be_invalid
-  end
-
-  it "is invalid with 5 character password" do
-    @user.password = @user.password_confirmation = "a" * 5
-    expect(@user).to be_invalid
-  end
-
 end
