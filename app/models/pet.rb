@@ -10,7 +10,7 @@ class Pet < ActiveRecord::Base
   validates :fixed, presence: true, inclusion:  { in: fixeds.keys }
   validates :breed, presence: true, format:     { with: VALID_NAME_REGEX }
   validates :name, presence: true, format:      { with: VALID_NAME_REGEX }
-  validates :bio, presence: true, length:       { minimum: 150, maximum: 500 }
+  validates :bio, presence: true, length:       { minimum: 13, maximum: 500 }
   validates :age, presence: true, numericality: { only_integer: true, greater_than: 0, less_than: 193 }
   validates :weight, presence: true, numericality: { only_integer: true, greater_than: 0, less_than: 130 }
 end
