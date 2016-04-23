@@ -1,4 +1,6 @@
 class Pet < ActiveRecord::Base
+  has_many :favorites
+  has_many :users, through: :favorites
   VALID_NAME_REGEX = /\A[a-zA-Z\-.\s]+\z/
   enum species: [:dog, :cat]
   enum sex: [:male, :female]

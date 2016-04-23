@@ -4,6 +4,8 @@ describe User do
   describe "models/user.rb" do
     let(:user) { FactoryGirl.build :user }
 
+    it { should have_many(:pets).through(:favorites) }
+    it { should have_many(:favorites) }
     it { should respond_to :email }
     it { should respond_to :password }
     it { should respond_to :password_confirmation }
@@ -63,6 +65,22 @@ describe User do
             user.email = invalid_email
             expect(user).to be_invalid
           end
+        end
+      end
+    end
+
+    describe "user methods" do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:pet) { FactoryGirl.create(:pet) }
+
+      it "has no favorites" do
+        expect(user.favorites).to be_empty
+      end
+
+      context ".favorite a pet" do
+        before { user.favorite(pet) }
+        it "favorited a pet" do
+          expect(user.favorites).not_to be_empty
         end
       end
     end

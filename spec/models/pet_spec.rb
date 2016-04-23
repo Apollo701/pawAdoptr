@@ -12,6 +12,8 @@ describe Pet do
     it { should respond_to :age }
     it { should respond_to :weight }
     it { should respond_to :fixed }
+    it { should have_many(:users).through(:favorites) }
+    it { should have_many(:favorites) }
   end
 
   describe "testing attributes of pets" do
