@@ -3,10 +3,22 @@
 
 .navbar-inverse {
   background-color: #cce6ff;
+  min-height: 75px;
   border-color: #b3d9ff;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open >
  a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
   background-color: #cce6ff;
+}
+
+.navbar {
+  .navbar-brand {
+    line-height: 45px;
+    font-size: 28px;
+  }
+  .navbar-nav > li > a {
+    line-height: 45px;
+    font-size: 18px;
+  }
 }
