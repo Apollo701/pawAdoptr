@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="#" class="navbar-brand">AllPaws</a>
+      <%= link_to 'PawAdoptr', '/', class: 'navbar-brand' %>
     </div>
      <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Adopt</a></li>
@@ -18,7 +18,7 @@
             <li><a href="#">Log-in</a></li>
             <li><a href="#">Privacy</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Sign-up</a></li>
+            <li><%= link_to 'Sign-up', signup_path %></li>
           </ul>
         </li>
       </ul>

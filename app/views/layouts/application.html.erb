@@ -8,12 +8,11 @@
 </head>
 <body>
 <%= render 'layouts/navbar' %>
+<%= render 'layouts/flash_messages' %>
 
 <div class="container">
-  <div class="div" id="main-banner">
-    <img class="img-responsive center-block" src="/assets/test3.jpg" alt="Dogs and Cats">
-  </div>
-</div>
   <%= yield %>
+</div>
+<%= debug(params) if Rails.env.development? %>
 </body>
 </html>
